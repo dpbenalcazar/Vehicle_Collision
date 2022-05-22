@@ -10,15 +10,10 @@ from utils import data_tools
 from config import *
 
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
-assert len(physical_devices) > 0, "Not enough GPU hardware devices available"
-config = tf.config.experimental.set_memory_growth(physical_devices[0], True)
-session = tf.Session(config=config)
-print('\n'*2 + '--Memory Growth enabled--' + '\n'*2)
+if len(physical_devices) > 0:
+    config = tf.config.experimental.set_memory_growth(physical_devices[0], True)
+    print('\n'*2 + '--Memory Growth enabled--' + '\n'*2)
 
-tf.reset_default_graph()
-tf.set_random_seed(0)
-random.seed(0)
-np.random.seed(0)
 
 if mode == 'train':
     if not os.path.exists(model_save_folder):
@@ -83,10 +78,12 @@ def inference(network, video_file):
 
 
 if  __name__ == "__main__":
+    print('\nGot in main function\n')
 
     model_tools = build_tools()
     network = model_tools.create_network(model_name)
-    
+    print('\nNetwork created successfully\n')
+
     if mode == 'train':
         train_generator = data_tools(train_folder,'train')
         valid_generator = data_tools(valid_folder,'valid')
@@ -94,7 +91,8 @@ if  __name__ == "__main__":
 
     else:
         network.load_weights(os.path.join(model_save_folder,'model_weights_032.ckpt'))
-        
+        #network.save('./files/{}/model_folder/model_weights_032.h5'.format(model_name))
+
         inference(network, os.path.join(base_folder,'files/samples', input_video))
 
         #testing from batch
