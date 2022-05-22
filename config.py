@@ -7,8 +7,10 @@ width,height,color_channels = 210,140,3
 number_of_hiddenunits = 32
 batch_size = 16
 
-model_name = 'inception'
+model_name = 'vgg' # 'inception'
 mode = 'test'
+
+input_video = 'GTA_V_3.mp4' # 'GTA_V_1.mp4' # 'GTA_V_2.mp4' # 
 
 #config
 base_folder = os.path.abspath(os.curdir)
