@@ -6,7 +6,7 @@ import json
 import shutil
 from collections import deque
 from model_architecture import build_tools
-from utils import data_tools
+from utils.utils import data_tools
 from config import *
 
 # Allow memory growth
