@@ -33,7 +33,7 @@ if mode == 'train':
 
 # Callback for saving checkpoints
 cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path, verbose=1,
-                                                 save_weights_only=True, period=save_freq)
+                                                 save_weights_only=True, save_freq=save_freq)
 
 # Tensorboard callback
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=tensorboard_save_folder, histogram_freq=0, write_graph=True,
