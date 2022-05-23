@@ -8,18 +8,20 @@ datasets_h5/*
 datasets_h5/
 check_files/
 check_files/*
+checkpoints/
+checkpoints/*
 formatted/
 summary_tf/*
 summary_tf/
-tensorboard_f
-tensorboard_f/*
+tensorboard/
+tensorboard/*
 files/
 files/*
 *.pyc
 *.json
 __pycache__/
 __pycache__/*
-__pycache__  
+__pycache__
 # Byte-compiled / optimized / DLL files
 __pycache__/
 .vscode/

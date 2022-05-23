@@ -71,13 +71,10 @@ class build_tools:
         return conv_model
 
     def create_network(self,model_name):
-        print('started loading')
         input_batch = tf.keras.layers.Input(shape = (time,height,width,color_channels))
-        print('created dummy input')
 
         if model_name == 'vgg':
             image_features = self.get_conv_vgg(input_batch)
-            print('VGG model created')
             lstm_network = tf.keras.layers.LSTM(number_of_hiddenunits, return_sequences=True,dropout=0.5,recurrent_dropout=0.5)(image_features)
             lstm_network = tf.keras.layers.LSTM(number_of_hiddenunits, return_sequences=False,dropout=0.5,recurrent_dropout=0.5)(lstm_network)
             lstm_network = tf.keras.layers.Dense(1024,activation='relu')(lstm_network)
@@ -91,7 +88,6 @@ class build_tools:
 
         elif model_name == 'inception':
             image_features = self.get_conv_inception(input_batch)
-            print('Inception model created')
             lstm_network = tf.keras.layers.LSTM(number_of_hiddenunits, return_sequences=True,dropout=0.5,recurrent_dropout=0.5)(image_features)
             lstm_network = tf.keras.layers.LSTM(number_of_hiddenunits, return_sequences=False,dropout=0.5,recurrent_dropout=0.5)(lstm_network)
             lstm_network = tf.keras.layers.Dense(512,activation='relu')(lstm_network)
@@ -99,7 +95,6 @@ class build_tools:
             lstm_network = tf.keras.layers.Dropout(0.5)(lstm_network)
             lstm_network = tf.keras.layers.Dense(n_classes,activation='softmax')(lstm_network)
 
-        print('LSTM network created')
         full_network = tf.keras.Model([input_batch],lstm_network)
         full_network.summary()
         return full_network

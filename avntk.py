@@ -1,4 +1,4 @@
-import os,random
+import os
 import tensorflow as tf
 import cv2
 import numpy as np
@@ -9,44 +9,52 @@ from model_architecture import build_tools
 from utils import data_tools
 from config import *
 
+# Allow memory growth
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 if len(physical_devices) > 0:
     config = tf.config.experimental.set_memory_growth(physical_devices[0], True)
     print('\n'*2 + '--Memory Growth enabled--' + '\n'*2)
 
-
+# Create training folders
 if mode == 'train':
+    # Create checkpoint's folder
     if not os.path.exists(model_save_folder):
         os.makedirs(model_save_folder)
     else:
         shutil.rmtree(model_save_folder)
         os.makedirs(model_save_folder)
 
+    # Create tensorboard folder
     if not os.path.exists(tensorboard_save_folder):
         os.makedirs(tensorboard_save_folder)
     else:
         shutil.rmtree(tensorboard_save_folder)
         os.makedirs(tensorboard_save_folder)
 
-
+# Callback for saving checkpoints
 cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path, verbose=1,
                                                  save_weights_only=True,period=4)
 
+# Tensorboard callback
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=tensorboard_save_folder, histogram_freq=0, write_graph=True,
                                                       write_images=False)
 
-#fourcc = cv2.VideoWriter_fourcc(*'MP4V')
-#out = cv2.VideoWriter(os.path.join(base_folder,'files','inference_video.mp4'),fourcc, 12.0, (width*4,height*4))
-
-
+# Model trainier
 def _trainer(network,train_generator,val_generator):
     network.compile(optimizer = 'adam', loss= 'binary_crossentropy',metrics = ['accuracy'])
     network.save_weights(checkpoint_path.format(epoch=0))
-    history =network.fit_generator(train_generator,epochs=epochs,steps_per_epoch=len(os.listdir(train_folder)) // batch_size,validation_data=val_generator,validation_steps=1,callbacks=[cp_callback,tensorboard_callback])
-    with open(os.path.join(base_folder,'files',model_name,'training_logs.json'),'w') as w:
+    steps_per_epoch = len(os.listdir(train_folder)) // batch_size
+    history =network.fit_generator(train_generator, epochs=epochs, steps_per_epoch=steps_per_epoch,
+                                   validation_data=val_generator, validation_steps=1,
+                                   callbacks=[cp_callback,tensorboard_callback]
+                                   )
+    with open(os.path.join(model_save_folder, 'training_logs.json'),'w') as w:
         json.dump(history.history,w)
 
+# Inference over an input video
 def inference(network, video_file):
+    #fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+    #out = cv2.VideoWriter(os.path.join(base_folder,'files','inference_video.mp4'),fourcc, 12.0, (width*4,height*4))
     cv2.namedWindow("CNN LSTMN Inference", cv2.WINDOW_NORMAL)
     cv2.resizeWindow("CNN LSTMN Inference", 840,560) # 1440,810
     print("\nProcessing Frames ...")
@@ -70,7 +78,7 @@ def inference(network, video_file):
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
             counter+=1
-            print (counter)
+            print('Frame: {:03d} , Prediction: {}'.format(counter, stat))
         else:
             cap.release()
             #out.release()
@@ -78,21 +86,28 @@ def inference(network, video_file):
 
 
 if  __name__ == "__main__":
-    print('\nGot in main function\n')
 
+    # Create model
     model_tools = build_tools()
     network = model_tools.create_network(model_name)
     print('\nNetwork created successfully\n')
 
     if mode == 'train':
+        # Read train and validation datasets
         train_generator = data_tools(train_folder,'train')
         valid_generator = data_tools(valid_folder,'valid')
-        _trainer(network,train_generator.batch_dispatch(),valid_generator.batch_dispatch())
+
+        # Train the network
+        _trainer(network, train_generator.batch_dispatch(), valid_generator.batch_dispatch())
 
     else:
-        network.load_weights(os.path.join(model_save_folder,'model_weights_032.ckpt'))
+        # Load weights
+        network.load_weights(checkpoint_path.format(epoch=test_epoch))
+
+        # Save Model
         #network.save('./files/{}/model_folder/model_weights_032.h5'.format(model_name))
 
+        # Process input video
         inference(network, os.path.join(base_folder,'files/samples', input_video))
 
         #testing from batch
