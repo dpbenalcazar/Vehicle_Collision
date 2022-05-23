@@ -6,6 +6,7 @@ n_classes = 2
 width, height, color_channels = (210, 140, 3)
 number_of_hiddenunits = 32
 batch_size = 16
+save_freq = 1
 
 data_type = 'cars' # eyes #
 model_name = 'vgg' # 'inception' #

@@ -33,7 +33,7 @@ if mode == 'train':
 
 # Callback for saving checkpoints
 cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path, verbose=1,
-                                                 save_weights_only=True,period=4)
+                                                 save_weights_only=True, period=save_freq)
 
 # Tensorboard callback
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=tensorboard_save_folder, histogram_freq=0, write_graph=True,
@@ -46,7 +46,7 @@ def _trainer(network,train_generator,val_generator):
     steps_per_epoch = len(os.listdir(train_folder)) // batch_size
     history =network.fit_generator(train_generator, epochs=epochs, steps_per_epoch=steps_per_epoch,
                                    validation_data=val_generator, validation_steps=1,
-                                   callbacks=[cp_callback,tensorboard_callback]
+                                   callbacks=[cp_callback, tensorboard_callback]
                                    )
     with open(os.path.join(model_save_folder, 'training_logs.json'),'w') as w:
         json.dump(history.history,w)
@@ -90,7 +90,7 @@ if  __name__ == "__main__":
     # Create model
     model_tools = build_tools()
     network = model_tools.create_network(model_name)
-    print('\nNetwork created successfully\n')
+    print('\n--Network created successfully--\n')
 
     if mode == 'train':
         # Read train and validation datasets
@@ -103,9 +103,10 @@ if  __name__ == "__main__":
     else:
         # Load weights
         network.load_weights(checkpoint_path.format(epoch=test_epoch))
+        print('\n--Weights loaded successfully--\n')
 
         # Save Model
-        #network.save('./files/{}/model_folder/model_weights_032.h5'.format(model_name))
+        #network.save('model_save_folder/model_weights_{:03d}.h5'.format(test_epoch))
 
         # Process input video
         inference(network, os.path.join(base_folder,'files/samples', input_video))
