@@ -9,11 +9,18 @@ from model_architecture import build_tools
 from utils.utils import data_tools
 from config import *
 
+from packaging import version
+from tensorflow import __version__ as tfver
+using_tf2 = version.parse(tfver) >= version.parse("2.0.0")
+
 # Allow memory growth
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 if len(physical_devices) > 0:
     config = tf.config.experimental.set_memory_growth(physical_devices[0], True)
+    if not using_tf2:
+        session = tf.Session(config=config)
     print('\n'*2 + '--Memory Growth enabled--' + '\n'*2)
+
 
 # Create training folders
 if mode == 'train':
