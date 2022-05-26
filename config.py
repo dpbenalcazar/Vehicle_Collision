@@ -12,7 +12,7 @@ data_type = 'cars' # iris_2classes # iris_4classes #
 model_name = 'vgg' # 'inception' #
 version = 'v1'
 
-mode = 'test' # 'train' #
+mode = 'test' # 'train' # 
 test_epoch = 32
 
 input_video = 'GTA_V_3.mp4' # 'GTA_V_1.mp4' # 'GTA_V_2.mp4' #
