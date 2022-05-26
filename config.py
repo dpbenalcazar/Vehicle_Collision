@@ -8,7 +8,7 @@ number_of_hiddenunits = 32
 batch_size = 16
 save_freq = 1
 
-data_type = 'cars' # eyes #
+data_type = 'cars' # iris_2classes # iris_4classes #
 model_name = 'vgg' # 'inception' #
 version = 'v1'
 
@@ -26,4 +26,4 @@ test_folder = os.path.join(data_path,'test_set')
 valid_folder = os.path.join(data_path,'valid_set')
 model_save_folder = os.path.join(base_folder,'checkpoints',model_ID)
 tensorboard_save_folder = os.path.join(base_folder,'tensorboard',model_ID)
-checkpoint_path = os.path.join(model_save_folder,"model_weights_{epoch:03d}.ckpt")
+checkpoint_path = os.path.join(model_save_folder,"model_weights_{epoch:03d}.h5")
