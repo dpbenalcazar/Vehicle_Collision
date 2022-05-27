@@ -7,6 +7,7 @@ import shutil
 from collections import deque
 from model_architecture import build_tools
 from utils.utils import data_tools
+from utils.FPS import FPS
 from config import *
 
 from packaging import version
@@ -69,6 +70,7 @@ def inference(network, video_file):
     cap = cv2.VideoCapture(video_file)
     counter = 0
     stat = 'safe'
+    fps = FPS().start()
     while (cap.isOpened()):
         ret, frame = cap.read()
         if ret:
@@ -85,11 +87,18 @@ def inference(network, video_file):
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
             counter+=1
+            fps.update()
             print('Frame: {:03d} , Prediction: {}'.format(counter, stat))
-        else:
-            cap.release()
-            #out.release()
-            cv2.destroyAllWindows()
+        
+    cap.release()
+    #out.release()
+    cv2.destroyAllWindows()
+    fps.stop()
+    print('\nSpeed Test Results:')
+    print('  -Elapsed time: {:0.2f} s'.format(fps.elapsed()))
+    print('  -Speed: {:0.2f} frames per second'.format(fps.fps()))
+    print('  -Speed: {:0.2f} seconds per frame'.format(1/fps.fps()))
+    return
 
 
 if  __name__ == "__main__":
