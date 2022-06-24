@@ -1,18 +1,18 @@
 import os
 
-epochs = 52
+epochs = 1000
 time = 8
 n_classes = 2
 width, height, color_channels = (210, 140, 3)
 number_of_hiddenunits = 32
-batch_size = 16
+batch_size = 24
 save_freq = 1
 
-data_type = 'cars' # iris_2classes # iris_4classes #
+data_type ='iris_2classes' #cars' # iris_2classes # iris_4classes #
 model_name = 'vgg' # 'inception' #
-version = 'v1'
+version = 'v3'
 
-mode = 'test' # 'train' # 
+mode = 'train' # 
 test_epoch = 32
 
 input_video = 'GTA_V_3.mp4' # 'GTA_V_1.mp4' # 'GTA_V_2.mp4' #
