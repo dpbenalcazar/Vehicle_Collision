@@ -51,6 +51,7 @@ wheels/
 *.egg
 MANIFEST
 nohup.out
+nohup.txt
 *.out
 
 # PyInstaller
