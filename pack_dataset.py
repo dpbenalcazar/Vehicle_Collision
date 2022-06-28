@@ -17,6 +17,7 @@ from pathlib import Path
 from sklearn.utils import shuffle
 from utils.image_folder import make_dataset
 from tqdm import tqdm
+from config import *
 
 
 #Función para encontrar un path
@@ -44,12 +45,13 @@ def sort_names(image_names):
     return sorted_names
 
 # Escoger set de partición
-partition_set_inp = 'Validation'
-partition_set_opt = 'valid_set'
+partition_set_inp = 'Train' #Ultima creación, antes test y valid
+partition_set_opt = 'train_set'
 
 #Para que lea todas las imágenes del dataset completo:
-dataset_dir = '/home/daniel/Datasets/Monocular_DB_Classification_Separated_Class/Version_1.0'
+dataset_dir = '/home/pame/PROYECT1/IRIS_DATA/One_Eye_DB_Classification_Separated_Class/Monocular_DB_Classification_Separated_Class/Version_1.0'
 output_dir = os.path.join('./datasets_h5/iris_4classes', partition_set_opt)
+#iris_4classesv2 INCLUYE TIPO
 
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
@@ -58,7 +60,6 @@ if not os.path.exists(output_dir):
 # ALCOHOL
 alcohol_dir = os.path.join(dataset_dir, '02_Alcohol_DB', partition_set_inp)
 alcohol_dataset = make_dataset(alcohol_dir)
-
 # DRUG
 drug_dir = os.path.join(dataset_dir, '03_Drug_DB', partition_set_inp)
 drug_dataset = make_dataset(drug_dir)
@@ -84,9 +85,10 @@ folders_sleep = carpetas(sleep_dataset)
 folders_control = carpetas(control_dataset)
 
 
-def make_tensor_5D (folder, clase = [0,1]):
+def make_tensor_5D (folder, clase = [0,1], tipo = 0):
     tensor_5d = []
     clase = np.array(clase, dtype='uint8')
+    tipo = np.array(tipo, dtype = 'uint8')
     for register in tqdm(folder, desc = "Making tensor 5D: "):
         sequence_dataset = make_dataset(str(register))
         sequence_dataset = sort_names(sequence_dataset)
@@ -105,7 +107,7 @@ def make_tensor_5D (folder, clase = [0,1]):
             seq_tensor = np.array(seq_tensor, dtype='uint8')
             #print(seq_tensor.shape)
 
-            data = [seq_tensor, clase]
+            data = [seq_tensor, clase, tipo]
             tensor_5d.append(data)
     # tamaño final (N,8,140,210,3)
     return(tensor_5d)
@@ -129,15 +131,44 @@ def split_tensor_5d (tensor_5d):
 # *************** 4.A  TEST FINAL **************
 # No control
 print('Alcohol:')
-tensor_alcohol = make_tensor_5D(folders_alcohol, clase = [1,0])
+if data_type == 'iris_2classes':
+    clase = [1,0]
+    tipo = 0
+elif data_type == 'iris_4classes':
+    clase = [1,0,0,0]
+    tipo = 0
+
+tensor_alcohol = make_tensor_5D(folders_alcohol, clase = clase, tipo = tipo)
+
 print('\nDrug:')
-tensor_drug = make_tensor_5D(folders_drug, clase = [1,0])
+if data_type == 'iris_2classes':
+    clase = [1,0]
+    tipo = 0
+elif data_type == 'iris_4classes':
+    clase = [0,0,1,0]
+    tipo = 2
+
+tensor_drug = make_tensor_5D(folders_drug, clase = clase, tipo = tipo)
+
 print('\nSleep:')
-tensor_sleep = make_tensor_5D(folders_sleep, clase = [1,0])
+if data_type == 'iris_2classes':
+    clase = [1,0]
+    tipo = 0
+elif data_type == 'iris_4classes':
+    clase = [0,0,0,1]
+    tipo = 3
+
+tensor_sleep = make_tensor_5D(folders_sleep, clase = clase, tipo = tipo)
 
 # Control
 print('\nControl:')
-tensor_control = make_tensor_5D(folders_control, clase = [0,1])
+if data_type == 'iris_2classes':
+    clase = [0,1]
+    tipo = 1
+elif data_type == 'iris_4classes':
+    clase = [0,1,0,0]
+    tipo = 1
+tensor_control = make_tensor_5D(folders_control, clase = clase, tipo = tipo)
 
 # *** TEST ***
 # V1: CONTROL + ALCOHOL, SIN MODIFICACIONES (26 MAYO)
@@ -153,6 +184,7 @@ for i,batch in enumerate(tqdm(all_batches_test, desc='Saving npz')):
     file_path = os.path.join(output_dir, file_name)
     name1 = batch[0]
     name2 = batch[1]
+    name3 = batch[2]
     np.savez(file_path, name1 = name1, name2= name2)
 
 print('\nDataset packed successfully!!!\n')

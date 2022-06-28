@@ -6,7 +6,6 @@ from config import *
 import numpy as np
 import h5py
 
-
 train_folder = os.path.join('datasets','train_set')
 test_folder = os.path.join('datasets','test_set')
 valid_folder = os.path.join('datasets','valid_set')
@@ -26,7 +25,7 @@ class data_tools:
         random.shuffle(self._data)
         while counter<=len(self._data):
             image_seqs=np.empty((0,time,height,width,color_channels))
-            labels = np.empty((0,2))
+            labels = np.empty((0, n_classes))
             for i in range(self.it):
                 np_data = np.load(os.path.join(self.data_folder,self._data[counter]))
                 image_seqs = np.vstack((image_seqs,np_data['name1']/255))

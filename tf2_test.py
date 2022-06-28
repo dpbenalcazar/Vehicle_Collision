@@ -2,7 +2,7 @@ import numpy as np
 import os
 import cv2
 import tensorflow as tf
-tf.config.set_visible_devices([], 'GPU')
+#tf.config.set_visible_devices([], 'GPU')
 from tensorflow import keras
 from imutils import paths
 from tqdm import tqdm
@@ -18,7 +18,8 @@ input_shape = (224, 224)
 
 # try:
 # Load model TF1.x
-model = keras.models.load_model('./files/vgg/model_folder/model_weights_032.h5')
+model = keras.models.load_model('./checkpoints/cars_vgg_v1/model_weights_032.h5')
+#model = keras.models.load_model('./checkpoints/iris_2classes_vgg_v1/model_weights_387.h5')
 print("\n"*2+"-- Model Loaded Successfully--"+"\n"*2)
 
 video_path = './files/samples/GTA_V_1.mp4'
