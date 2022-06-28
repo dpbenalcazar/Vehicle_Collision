@@ -58,3 +58,7 @@ nohup.out
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+
+#Aikit Iris
+aikit_iris
+aikit_iris/*

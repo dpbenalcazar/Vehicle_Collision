@@ -14,6 +14,7 @@ version = 'v2'
 
 mode = 'train' #'test' # 'train' #
 test_epoch = 387
+nsequences=  'all' #1 #'all'
 
 input_video = 'GTA_V_3.mp4' # 'GTA_V_1.mp4' # 'GTA_V_2.mp4' #
 
