@@ -118,27 +118,27 @@ def split_tensor_5d (tensor_5d):
 # Control
 print('\nControl:')
 if data_type == 'iris_2classes':
-    clase = [0,1]
+    clase = [1,0]
     tipo = 1
 elif data_type == 'iris_4classes':
-    clase = [0,1,0,0]
+    clase = [1,0,0,0]
     tipo = 1
 tensor_control = make_tensor_5D(folders_control, clase = clase, tipo = tipo)
 
 # No control
 print('Alcohol:')
 if data_type == 'iris_2classes':
-    clase = [1,0]
+    clase = [0,1]
     tipo = 0
 elif data_type == 'iris_4classes':
-    clase = [1,0,0,0]
+    clase = [0,1,0,0]
     tipo = 0
 
 tensor_alcohol = make_tensor_5D(folders_alcohol, clase = clase, tipo = tipo)
 
 print('\nDrug:')
 if data_type == 'iris_2classes':
-    clase = [1,0]
+    clase = [0,1]
     tipo = 0
 elif data_type == 'iris_4classes':
     clase = [0,0,1,0]
@@ -148,7 +148,7 @@ tensor_drug = make_tensor_5D(folders_drug, clase = clase, tipo = tipo)
 
 print('\nSleep:')
 if data_type == 'iris_2classes':
-    clase = [1,0]
+    clase = [0,1]
     tipo = 0
 elif data_type == 'iris_4classes':
     clase = [0,0,0,1]
