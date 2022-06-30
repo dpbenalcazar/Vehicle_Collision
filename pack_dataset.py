@@ -34,7 +34,7 @@ partition_set_inp = 'Train' #Ultima creación, antes test y valid
 partition_set_opt = 'train_set'
 
 #Para que lea todas las imágenes del dataset completo:
-dataset_dir = '/home/pame/PROYECT1/IRIS_DATA/One_Eye_DB_Classification_Separated_Class/Monocular_DB_Classification_Separated_Class/Version_1.0'
+dataset_dir = '/home/ubuntu/Github/Vehicle_Collision/files/iris_raw_dataset/Version_1.0'
 output_dir = os.path.join('./datasets_h5/iris_4classes', partition_set_opt)
 #iris_4classesv2 INCLUYE TIPO
 
