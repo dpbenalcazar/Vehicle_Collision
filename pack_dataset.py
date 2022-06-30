@@ -18,31 +18,16 @@ from sklearn.utils import shuffle
 from utils.image_folder import make_dataset
 from tqdm import tqdm
 from config import *
+from utils.utils2 import *
 
 
 #Función para encontrar un path
-def get_folder(path):
-    folder = '/'
-    for x in path.split('/')[1:-1]:
-        folder = folder + x + '/'
-    return folder
+#aqui estaba def_folder, ahora en utils2
 
 #Función para que imágenes salgan en orden correcto
-def sort_names(image_names):
-    # Find Indices
-    idx = [int(name.split('_')[-1].split('.')[0]) for name in image_names]
+#aquí estaba sort_names, ahora en utils2
 
-    # Create empty list to store the sorted names
-    sorted_names = [None]*(max(idx)+1)
-
-    # Sort names
-    for i, j in enumerate(idx):
-        sorted_names[j] = image_names[i]
-
-    # Eliminate empty elements
-    sorted_names = [name for name in sorted_names if name is not None]
-
-    return sorted_names
+#Make dataset está en utils.image_folder
 
 # Escoger set de partición
 partition_set_inp = 'Train' #Ultima creación, antes test y valid
@@ -91,7 +76,7 @@ def make_tensor_5D (folder, clase = [0,1], tipo = 0):
     tipo = np.array(tipo, dtype = 'uint8')
     for register in tqdm(folder, desc = "Making tensor 5D: "):
         sequence_dataset = make_dataset(str(register))
-        sequence_dataset = sort_names(sequence_dataset)
+        sequence_dataset = sort_names(sequence_dataset)    
 
         for i in range(len(sequence_dataset)-8):
             seq_tensor = []
@@ -110,6 +95,7 @@ def make_tensor_5D (folder, clase = [0,1], tipo = 0):
             data = [seq_tensor, clase, tipo]
             tensor_5d.append(data)
     # tamaño final (N,8,140,210,3)
+
     return(tensor_5d)
 
 def split_tensor_5d (tensor_5d):
@@ -129,6 +115,16 @@ def split_tensor_5d (tensor_5d):
 
 
 # *************** 4.A  TEST FINAL **************
+# Control
+print('\nControl:')
+if data_type == 'iris_2classes':
+    clase = [0,1]
+    tipo = 1
+elif data_type == 'iris_4classes':
+    clase = [0,1,0,0]
+    tipo = 1
+tensor_control = make_tensor_5D(folders_control, clase = clase, tipo = tipo)
+
 # No control
 print('Alcohol:')
 if data_type == 'iris_2classes':
@@ -160,18 +156,7 @@ elif data_type == 'iris_4classes':
 
 tensor_sleep = make_tensor_5D(folders_sleep, clase = clase, tipo = tipo)
 
-# Control
-print('\nControl:')
-if data_type == 'iris_2classes':
-    clase = [0,1]
-    tipo = 1
-elif data_type == 'iris_4classes':
-    clase = [0,1,0,0]
-    tipo = 1
-tensor_control = make_tensor_5D(folders_control, clase = clase, tipo = tipo)
-
 # *** TEST ***
-# V1: CONTROL + ALCOHOL, SIN MODIFICACIONES (26 MAYO)
 all_data = tensor_control + tensor_alcohol + tensor_drug + tensor_sleep
 np.random.shuffle(all_data)
 

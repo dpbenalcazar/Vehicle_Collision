@@ -9,10 +9,10 @@ from model_architecture import build_tools
 from utils.image_folder import make_dataset
 from PIL import Image
 from utils.utils import data_tools
-from utils.utils2 import *
 from utils.FPS import FPS
 from config import *
 from tqdm import tqdm
+
 from packaging import version
 from tensorflow import __version__ as tfver
 using_tf2 = version.parse(tfver) >= version.parse("2.0.0")
@@ -24,6 +24,30 @@ if len(physical_devices) > 0:
     if not using_tf2:
         session = tf.Session(config=config)
     print('\n'*2 + '--Memory Growth enabled--' + '\n'*2)
+
+#Función para encontrar un path
+def get_folder(path):
+    folder = '/'
+    for x in path.split('/')[1:-1]:
+        folder = folder + x + '/'
+    return folder
+
+#Función para que imágenes salgan en orden correcto
+def sort_names(image_names):
+    # Find Indices
+    idx = [int(name.split('_')[-1].split('.')[0]) for name in image_names]
+
+    # Create empty list to store the sorted names
+    sorted_names = [None]*(max(idx)+1)
+
+    # Sort names
+    for i, j in enumerate(idx):
+        sorted_names[j] = image_names[i]
+
+    # Eliminate empty elements
+    sorted_names = [name for name in sorted_names if name is not None]
+
+    return sorted_names
 
 #Para que lea todas las imágenes del dataset completo:
 dataset_dir = '/home/pame/PROYECT1/Vehicle_Collision-master/files/TEST'
