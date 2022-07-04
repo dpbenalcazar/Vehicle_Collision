@@ -30,8 +30,8 @@ from utils.utils2 import *
 #Make dataset está en utils.image_folder
 
 # Escoger set de partición
-partition_set_inp = 'Train' #Ultima creación, antes test y valid
-partition_set_opt = 'train_set'
+partition_set_inp = 'Validation' #Ultima creación, antes test y valid
+partition_set_opt = 'valid_set'
 
 #Para que lea todas las imágenes del dataset completo:
 dataset_dir = '/home/ubuntu/Github/Vehicle_Collision/files/iris_raw_dataset/Version_1.0'
@@ -169,7 +169,6 @@ for i,batch in enumerate(tqdm(all_batches_test, desc='Saving npz')):
     file_path = os.path.join(output_dir, file_name)
     name1 = batch[0]
     name2 = batch[1]
-    name3 = batch[2]
     np.savez(file_path, name1 = name1, name2= name2)
 
 print('\nDataset packed successfully!!!\n')

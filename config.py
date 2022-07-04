@@ -5,7 +5,7 @@ time = 8
 n_classes = 4
 width, height, color_channels = (210, 140, 3)
 number_of_hiddenunits = 32
-batch_size = 16
+batch_size = 24
 save_freq = 1
 
 data_type = 'iris_4classes' #   #'iris_2classes' # 'cars' # 
