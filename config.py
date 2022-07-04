@@ -8,7 +8,7 @@ number_of_hiddenunits = 32
 batch_size = 16
 save_freq = 1
 
-data_type = 'iris_4classes' #   #'iris_2classes' # 'cars' # 
+data_type = 'iris_2classes' # 'iris_4classes' #   #'iris_2classes' # 'cars' # 
 model_name = 'vgg' # 'inception' #
 vers = 'v1'
 
