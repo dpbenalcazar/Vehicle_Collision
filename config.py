@@ -8,12 +8,12 @@ number_of_hiddenunits = 32
 batch_size = 24
 save_freq = 1
 
-data_type = 'iris_2classes' # 'iris_4classes' #   #'iris_2classes' # 'cars' # 
+data_type = 'iris_4classes' # 'iris_4classes' #   #'iris_2classes' # 'cars' # 
 model_name = 'vgg' # 'inception' #
 vers = 'v1'
 
 mode = 'train' #'test' # 'train' #
-test_epoch = 1000
+test_epoch = 188
 nsequences=  1 #1 #'all'
 
 input_video = 'GTA_V_3.mp4' # 'GTA_V_1.mp4' # 'GTA_V_2.mp4' #

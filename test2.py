@@ -26,7 +26,7 @@ if len(physical_devices) > 0:
     print('\n'*2 + '--Memory Growth enabled--' + '\n'*2)
 
 #Para que lea todas las imágenes del dataset completo:
-dataset_dir = '/home/pame/PROYECT1/Vehicle_Collision-master/files/TEST'
+dataset_dir = '/home/pame/PROYECT1/Vehicle_Collision_final/files/TEST'
 output_dir = './files/test_set/'
 name = '{}_{}_{}_e{}_ns{}.npz'.format(model_name, data_type, vers, test_epoch, nsequences)
 output_file = os.path.join(output_dir, name)
@@ -106,51 +106,50 @@ def inference (network, folder, clase = [0,1], tipo = 0, nsequences = None):
             data = [r, clase, tipo]
             predictions.append(data)
             #print('PREDICTIONS',predictions)
-            print('SHAPE DE SEQUENCE DATASET',  np.shape(sequence_dataset))
-            print('TAMAÑO DE PREDICTIONS', len(predictions))
-            print('SHAPE DE PREDICTIONS', np.shape(predictions))
+            #print('SHAPE DE SEQUENCE DATASET',  np.shape(sequence_dataset))
+            #print('TAMAÑO DE PREDICTIONS', len(predictions))
+            #print('SHAPE DE PREDICTIONS', np.shape(predictions))
     # tamaño final (N,8,140,210,3)
     return(predictions)
 
 # *************** 4.A  TEST FINAL **************
 # No control
-print('Alcohol:')
+# Control
+print('\nControl:')
 if data_type == 'iris_2classes':
     clase = [1,0]
     tipo = 0
 if data_type == 'iris_4classes':
     clase = [1,0,0,0]
     tipo = 0
+pred_control = inference (network, folders_control, clase = clase, tipo = tipo, nsequences = nsequences)
 
-
-pred_alcohol = inference (network, folders_alcohol, clase = clase, tipo = tipo, nsequences = nsequences)
-
-print('\nDrug:')
-if data_type == 'iris_2classes':
-    clase = [1,0]
-    tipo = 0
-if data_type == 'iris_4classes':
-    clase = [0,0,1,0]
-    tipo = 2
-pred_drug = inference (network, folders_drug, clase = clase, tipo = tipo, nsequences = nsequences)
-print('\nSleep:')
-if data_type == 'iris_2classes':
-    clase = [1,0]
-    tipo = 0
-if data_type == 'iris_4classes':
-    clase = [0,0,0,1]
-    tipo = 3
-pred_sleep = inference (network, folders_sleep, clase = clase, tipo = tipo, nsequences = nsequences)
-
-# Control
-print('\nControl:')
+print('Alcohol:')
 if data_type == 'iris_2classes':
     clase = [0,1]
     tipo = 1
 if data_type == 'iris_4classes':
     clase = [0,1,0,0]
     tipo = 1
-pred_control = inference (network, folders_control, clase = clase, tipo = tipo, nsequences = nsequences)
+
+pred_alcohol = inference (network, folders_alcohol, clase = clase, tipo = tipo, nsequences = nsequences)
+
+print('\nDrug:')
+if data_type == 'iris_2classes':
+    clase = [0,1]
+    tipo = 1
+if data_type == 'iris_4classes':
+    clase = [0,0,1,0]
+    tipo = 2
+pred_drug = inference (network, folders_drug, clase = clase, tipo = tipo, nsequences = nsequences)
+print('\nSleep:')
+if data_type == 'iris_2classes':
+    clase = [0,1]
+    tipo = 1
+if data_type == 'iris_4classes':
+    clase = [0,0,0,1]
+    tipo = 3
+pred_sleep = inference (network, folders_sleep, clase = clase, tipo = tipo, nsequences = nsequences)
 
 
 # *** TEST ***
