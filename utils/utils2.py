@@ -37,3 +37,35 @@ def sort_names(image_names):
     sorted_names = [name for name in sorted_names if name is not None]
 
     return sorted_names
+
+########################################
+'''
+# Read image names
+image_names = []
+for root, dirnames, filenames in os.walk(input_dir):
+    for file in filenames:
+        if file.endswith(".jpg") or file.endswith(".png") or file.endswith(".bmp"):
+            image_names.append(file)
+    break
+image_names = sorted(image_names)
+valid_frames = len(image_names) - i0
+if valid_frames<=0:
+    if __name__ == '__main__':
+        print("   Empty folder!")
+    return
+if __name__ == '__main__':
+    print("   Number of valid frames: {}".format(valid_frames))
+
+# Get frame dimensions
+frame = Image.open(os.path.join(input_dir , image_names[0]))
+frame_width, frame_height = frame.size
+
+# Sort images
+if sort_images:
+    idx = [int(name.split("_")[-1].split('.')[0]) for name in image_names]
+    image_names_old = image_names
+    image_names = [None] * (max(idx)+1)
+    for i, j in enumerate(idx):
+        image_names[j] = image_names_old[i]
+    image_names = [name for name in image_names if name is not None]
+    '''

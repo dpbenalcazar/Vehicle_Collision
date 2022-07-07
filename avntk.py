@@ -39,12 +39,26 @@ if mode == 'train':
         os.makedirs(tensorboard_save_folder)
 
 # Callback for saving checkpoints
-cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path, verbose=1,
-                                                 save_weights_only=True, period=save_freq)
+cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path, verbose=1,save_weights_only=True, 
+                                                 period=save_freq, mode=max, save_best_only=True, monitor='val_acc')
+                                                 #Salva la cantidad monitoreada máxima
+                                                 #mode = max, save_best_only = True monitor = 'val'
+                                                 #Para salvar cada cierta frecuencia
 
 # Tensorboard callback
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=tensorboard_save_folder, histogram_freq=0, write_graph=True,
                                                       write_images=False)
+
+#Callback for learning rate
+def scheduler(epoch, lr):
+    if epoch <10:
+        lr = 0.0001
+        return lr
+    else:
+        lr = 0.0001
+        return lr
+
+cp_learningrate = tf.keras.callbacks.LearningRateScheduler(scheduler)
 
 # Model trainier
 def _trainer(network,train_generator,val_generator):
@@ -53,7 +67,7 @@ def _trainer(network,train_generator,val_generator):
     steps_per_epoch = len(os.listdir(train_folder)) // batch_size
     history =network.fit_generator(train_generator, epochs=epochs, steps_per_epoch=steps_per_epoch,
                                    validation_data=val_generator, validation_steps=1,
-                                   callbacks=[cp_callback, tensorboard_callback]
+                                   callbacks=[cp_callback, tensorboard_callback, cp_learningrate]
                                    )
     with open(os.path.join(model_save_folder, 'training_logs.json'),'w') as w:
         json.dump(history.history,w)

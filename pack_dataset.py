@@ -3,6 +3,7 @@ from cgi import test
 import os
 import pathlib
 from pickletools import uint8
+from unittest import skip
 from cv2 import resize
 import numpy as np
 from io import BytesIO
@@ -30,12 +31,12 @@ from utils.utils2 import *
 #Make dataset está en utils.image_folder
 
 # Escoger set de partición
-partition_set_inp = 'Validation' #Ultima creación, antes test y valid
-partition_set_opt = 'valid_set'
+partition_set_inp = 'Train' #Ultima creación, antes test y valid
+partition_set_opt = 'train_set'
 
 #Para que lea todas las imágenes del dataset completo:
-dataset_dir = '/home/ubuntu/Github/Vehicle_Collision/files/iris_raw_dataset/Version_1.0'
-output_dir = os.path.join('./datasets_h5/iris_4classes', partition_set_opt)
+dataset_dir = '/home/pame/PROYECT1/IRIS_DATA/One_Eye_DB_Classification_Separated_Class/Monocular_DB_Classification_Separated_Class/Version_1.0'
+output_dir = os.path.join('./datasets_h5/AC', partition_set_opt)
 #iris_4classesv2 INCLUYE TIPO
 
 if not os.path.exists(output_dir):
@@ -76,6 +77,7 @@ def make_tensor_5D (folder, clase = [0,1], tipo = 0):
     tipo = np.array(tipo, dtype = 'uint8')
     for register in tqdm(folder, desc = "Making tensor 5D: "):
         sequence_dataset = make_dataset(str(register))
+        #Sacar sort_names, hacer un contador que cuente cuántas imágenes hay. 
         sequence_dataset = sort_names(sequence_dataset)    
 
         for i in range(len(sequence_dataset)-8):
@@ -123,6 +125,10 @@ if data_type == 'iris_2classes':
 elif data_type == 'iris_4classes':
     clase = [1,0,0,0]
     tipo = 1
+elif data_type == 'AC':
+    clase = [1,0]
+    tipo = 1
+
 tensor_control = make_tensor_5D(folders_control, clase = clase, tipo = tipo)
 
 # No control
@@ -133,9 +139,12 @@ if data_type == 'iris_2classes':
 elif data_type == 'iris_4classes':
     clase = [0,1,0,0]
     tipo = 0
+elif data_type == 'AC':
+    clase = [0,1]
+    tipo = 0
 
 tensor_alcohol = make_tensor_5D(folders_alcohol, clase = clase, tipo = tipo)
-
+'''
 print('\nDrug:')
 if data_type == 'iris_2classes':
     clase = [0,1]
@@ -143,6 +152,8 @@ if data_type == 'iris_2classes':
 elif data_type == 'iris_4classes':
     clase = [0,0,1,0]
     tipo = 2
+elif data_type == 'AC':
+    pass
 
 tensor_drug = make_tensor_5D(folders_drug, clase = clase, tipo = tipo)
 
@@ -153,11 +164,13 @@ if data_type == 'iris_2classes':
 elif data_type == 'iris_4classes':
     clase = [0,0,0,1]
     tipo = 3
+elif data_type == 'AC':
+    pass
 
 tensor_sleep = make_tensor_5D(folders_sleep, clase = clase, tipo = tipo)
-
+'''
 # *** TEST ***
-all_data = tensor_control + tensor_alcohol + tensor_drug + tensor_sleep
+all_data = tensor_control + tensor_alcohol #+ tensor_drug + tensor_sleep
 np.random.shuffle(all_data)
 
 print('\nForming batches')
